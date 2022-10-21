@@ -1,7 +1,9 @@
 # Zombie-game BY JENGZY
 ## Player :sunglasses:
 
-### Charactor Story
+<img src="src/main/java/org/example/assets/Player.png" />
+
+### Story
 
 <p>
 ชายผู้ที่กำลังติดเชื้อ เขาต้องการ <em><strong>ยาต้านเชื้อ zombie :syringe:</strong><em><br/>
@@ -20,19 +22,52 @@ RIGHT(→) <br/>
 
 ## Zombie :zombie_man:
 
-### Charactor Story
+<img src="src/main/java/org/example/assets/Enemy.png" />
+
+### Story
 
 <p>
-ผู้ที่กำลังติดเชื้อ และพวกเขาเป็นซอมบี้ไปแล้ว พวกเขาต้องการ <em><strong>กินเนื้อของมนุษย์ :cut_of_meat:</strong> แบบไม่สุก(ดิบ)<em><br/>
+ผู้ที่กำลังติดเชื้อ และพวกเขาเป็นซอมบี้ไปแล้ว พวกเขาต้องการ <em><strong>กินเนื้อของมนุษย์ :cut_of_meat:</strong><em><br/>
 การดำรงอยู่ของพวกเขามีเพื่อเป็น <em><strong>ศรัตรู!! :imp:</strong><em> เพื่อรอวันล้างมนุษยชาติ~~<br/>
 </p>
 
 ### Movement :
 <h4>
 ต้องยอมรับว่าการเคลื่อนที่ของพวกมันเราไม่สามารถคาดการณ์อะไรได้เลย(Random):man_dancing:<br/>
-<em><strong>ต้องระวังทุกไก่ย่าง</strong><em>
+<em><strong>ต้องระวังทุกไก่ย่าง</strong><em> ผ่ามมม!!
 </h4>
 <hr/>
 
+## Wall :bricks:
+
+<img src="src/main/java/org/example/assets/Wall.png" />
+
+### Story
+
+<p>
+สิ่งกีดขวาง แน่นอนว่า<em><strong> มันขวางเราไว้!!! :no_entry_sign:</strong><em>
+</p>
+
+### Movement :
+<h4>
+<em><strong>มันขยับไม่ได้</strong><em> ผ่ามมม!!
+</h4>
+<hr/>
+
+## Medicine :syringe:
+
+<img src="src/main/java/org/example/assets/Medical.png" />
+
+### Story
+
+<p>
+ยาต้านเชื้อ แน่นอนว่า<em><strong> มันต้านโรคร้ายได้ :no_entry_sign:</strong><em>
+</p>
+
+### Movement :
+<h4>
+<em><strong>มันขยับไม่ได้</strong><em> ผ่ามมม!!
+</h4>
+<hr/>
 
 <h1>ช่วยโลกใบนี้ไว้!!</h1>
