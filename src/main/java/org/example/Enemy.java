@@ -16,15 +16,15 @@ public class Enemy {
     private Point pos;
     private int key_val;
 
-    public Enemy() {
-        LoadImage();
+    public Enemy(int x, int y, String enemySkin) {
+        LoadImage(enemySkin);
 
-        pos = new Point(9,9);
+        pos = new Point(x,y);
     }
 
-    private void LoadImage() {
+    private void LoadImage(String enemySkin) {
         try {
-            image = ImageIO.read(new File("src/main/java/org/example/assets/Enemy.png"));
+            image = ImageIO.read(new File("src/main/java/org/example/assets/" + enemySkin + ".png"));
         } catch (IOException exc) {
             System.out.println("Error opening image file: " + exc.getMessage());
         }
@@ -68,22 +68,19 @@ public class Enemy {
         Random rand = new Random();
         key_val = rand.nextInt(40 - 34 + 1) + 34;
 
-        if (key_val == KeyEvent.VK_UP) {
-            pos.translate(0, -1);
-        }
         if (key_val == KeyEvent.VK_RIGHT) {
             pos.translate(1, 0);
         }
-        if (key_val == KeyEvent.VK_DOWN && pos.y != Board.ROWS-2) {
-            pos.translate(0, 1);
-        }
+
         if (key_val == KeyEvent.VK_LEFT) {
             pos.translate(-1, 0);
         }
+
         // IDLE
-        if (key_val < 37) { 
+        if (key_val < 37) {
             pos = getPos();
         }
+
     }
 
     public Point getPos() {

@@ -9,17 +9,16 @@ import javax.swing.*;
 public class Board extends JPanel implements ActionListener, KeyListener {
     private final int DELAY = 80;
     public static final int TILE_SIZE = 50;
-    public static final int ROWS = 10;
-    public static final int COLUMNS = 10;
+    public static final int ROWS = 15;
+    public static final int COLUMNS = 15;
     private static final long serialVersionUID = 490905409104883233L;
     private Timer timer;
-    private int ENEMY_NUM = 3;
+    private int ENEMY_NUM = 1;
 
-    // OBJECT IN BOARD GAME
     private Player player;
     private ArrayList<Enemy> enemys;
     private ArrayList<Wall> walls;
-    private Medical medical;
+    private Gate gate;
     private ArrayList<Point> wallsPos;
 
     public Board() {
@@ -33,7 +32,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         walls = CreateWalls();
         enemys = CreateEnemy();
         FindWallPosRand();
-        CreateMedicals();
+        CreateGate();
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -51,10 +50,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             enemy.checkWall(walls);
         }
 
-        CollectMed();
-        CheckMedInWall(); // check medical spawn in wall
-
         CheckGameOver();
+        CheckGameWin();
+
         repaint();
     }
 
@@ -69,8 +67,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             wall.draw(g, this);
         }
 
-        if (medical != null) {
-            medical.draw(g, this);
+        if (gate != null) {
+            gate.draw(g, this);
         }
 
         for (var enemy : enemys) {
@@ -147,102 +145,39 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private ArrayList<Wall> CreateWalls() {
         var walls = new ArrayList<Wall>(){};
 
-        // Walls Row 1
-        var wr1_1 = new Wall(1, 1);
-        var wr1_2 = new Wall(2, 1);
-        var wr1_3 = new Wall(3, 1);
-        var wr1_4 = new Wall(5, 1);
-        var wr1_5 = new Wall(6, 1);
-        var wr1_6 = new Wall(7, 1);
-        var wr1_7 = new Wall(8, 1);
+        for (int row = 2; row < ROWS - 1; row+=2) {
+            for (int col = 0; col < COLUMNS; col+=1) {
+                Random rand = new Random();
+                int col_axis = rand.nextInt(14 - 0 + 1) + 0;
+                walls.add(new Wall(col_axis, row));
+            }
+        }
 
-        // Walls Row 2
-        var wr2_1 = new Wall(1, 2);
-        var wr2_2 = new Wall(8, 2);
+        int idx = 0;
+        for (int row = 0; row < 2; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                walls.add(new Wall(col, idx));
+            }
+            idx = ROWS-1;
+        }
 
-        // Walls Row 3
-        var wr3_1 = new Wall(1, 3);
-        var wr3_2 = new Wall(3, 3);
-        var wr3_3 = new Wall(4, 3);
-        var wr3_4 = new Wall(6, 3);
-        var wr3_5 = new Wall(8, 3);
+        idx = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                walls.add(new Wall(0, row));
+                walls.add(new Wall(COLUMNS-1, row));
+            }
+            idx = ROWS-1;
+        }
 
-        // Walls Row 4
-        var wr4_1 = new Wall(1,4);
-        var wr4_2 = new Wall(3,4);
-        var wr4_3 = new Wall(6,4);
-
-        // Walls Row 5
-        var wr5_1 = new Wall(3,5);
-        var wr5_2 = new Wall(6,5);
-        var wr5_3 = new Wall(8,5);
-
-        // Walls Row 6
-        var wr6_1 = new Wall(1, 6);
-        var wr6_2 = new Wall(3, 6);
-        var wr6_3 = new Wall(5, 6);
-        var wr6_4 = new Wall(6, 6);
-        var wr6_5 = new Wall(8, 6);
-
-        // Walls Row 7
-        var wr7_1 = new Wall(1, 7);
-        var wr7_2 = new Wall(8, 7);
-
-        // Walls Row 8
-        var wr8_1 = new Wall(1, 8);
-        var wr8_2 = new Wall(2, 8);
-        var wr8_3 = new Wall(3, 8);
-        var wr8_4 = new Wall(4, 8);
-        var wr8_5 = new Wall(6, 8);
-        var wr8_6 = new Wall(7, 8);
-        var wr8_7 = new Wall(8, 8);
-
-        Wall[] arrs = {wr1_1,wr1_2,wr1_3,wr1_4,wr1_5,wr1_6,wr1_7,
-                        wr2_1,wr2_2,
-                        wr3_1,wr3_2,wr3_3,wr3_4,wr3_5,
-                        wr4_1,wr4_2,wr4_3,
-                        wr5_1,wr5_2,wr5_3,
-                        wr6_1,wr6_2,wr6_3,wr6_4,wr6_5,
-                        wr7_1,wr7_2,
-                        wr8_1,wr8_2,wr8_3,wr8_4,wr8_5,wr8_6,wr8_7,};
-
-        for (var el : arrs) walls.add(el);
         return walls;
     }
 
-    private void CreateMedicals() {
+    private void CreateGate() {
         Random rand = new Random();
-        int medX = rand.nextInt(ROWS);
-        int medY = rand.nextInt(COLUMNS);
+        int x = rand.nextInt(13 - 1 + 1) + 1;
 
-        var point = new Point(medX, medX);
-        for (var wall : wallsPos) {
-            if (wall == point && medical == null) {
-                medical = new Medical(9, 0);
-                break;
-            }
-
-            if (wall != point && medical == null) {
-                medical = new Medical(medX, medY);
-                break;
-            } else {
-                medical = null;
-            }
-        }
-    }
-
-    private void CheckMedInWall() {
-        if (wallsPos.contains(medical.getPos())) {
-            medical = null;
-            medical = new Medical(9, 0);
-        }
-    }
-
-    private void CollectMed() {
-        if (player.getPos().equals(medical.getPos())) {
-            player.addScore(10);
-            CreateMedicals();
-        }
+        gate = new Gate(x, 13);
     }
 
     private void FindWallPosRand() {
@@ -258,9 +193,35 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private ArrayList<Enemy> CreateEnemy() {
         var enemy = new ArrayList<Enemy>(){};
 
-        for (int i = 0; i < ENEMY_NUM; i++) {
-            enemy.add(new Enemy());
-        }
+        // CHANGE ENEMY SKIN WITH VARIABLE
+        String enemy1 = "Enemy"; // Name file
+        String enemy2 = "Enemy";
+        String enemy3 = "Gate";
+
+        // ตัวอย่าง: enemy.add(new Enemy(1, 3, ตัวแปรสำหรับ skin enemy));
+
+        // ROW1
+        enemy.add(new Enemy(1, 3, enemy3));
+        enemy.add(new Enemy(13, 3, enemy3));
+
+        // ROW2
+        enemy.add(new Enemy(1, 5, enemy2));
+        enemy.add(new Enemy(3, 5, enemy2));
+
+        // ROW3
+        enemy.add(new Enemy(2, 7, enemy1));
+        enemy.add(new Enemy(8, 7, enemy2));
+
+        // ROW4
+        enemy.add(new Enemy(5, 9, enemy1));
+        enemy.add(new Enemy(10, 9, enemy3));
+
+        // ROW5
+        enemy.add(new Enemy(5, 11, enemy3));
+        enemy.add(new Enemy(8, 11, enemy1));
+
+        // ROW6
+        enemy.add(new Enemy(1, 13, enemy1));
 
         return enemy;
     }
@@ -273,6 +234,14 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 System.exit(0);
                 break;
             }
+        }
+    }
+
+    private void CheckGameWin() {
+        if (player.getPos().equals(gate.getPos())) {
+            JOptionPane.showMessageDialog(null, "Game Win");
+            this.setVisible(false);
+            System.exit(0);
         }
     }
 }

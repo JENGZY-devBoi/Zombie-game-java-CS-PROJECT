@@ -4,7 +4,10 @@ import javax.swing.*;
 
 public class Main {
     private static void initWindow() {
-        JFrame window = new JFrame("Escape the dead!!");
+        // TITLE BAR NAME
+        String name = "NAME GAME";
+
+        JFrame window = new JFrame(name);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Board board = new Board();
         window.add(board);

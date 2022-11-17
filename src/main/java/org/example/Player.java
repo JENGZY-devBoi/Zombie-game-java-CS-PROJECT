@@ -19,7 +19,7 @@ public class Player {
      public Player() {
           LoadImage();
 
-          pos = new Point(0,0);
+          pos = new Point(1,1);
           score = 0;
      }
 
