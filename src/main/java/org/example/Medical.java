@@ -17,10 +17,6 @@ public class Medical {
         pos = new Point(x, y);
     }
 
-    private void main () {
-
-    }
-
     private void LoadImage() {
         try {
             image = ImageIO.read(new File("src/main/java/org/example/assets/Medical.png"));
